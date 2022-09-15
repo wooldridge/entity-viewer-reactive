@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ReactiveBase, DataSearch } from "@appbaseio/reactivesearch";
+import { ReactiveBase, DataSearch, ReactiveList, ResultCard } from "@appbaseio/reactivesearch";
 import appConfig from './config/app.config';
-import searchConfig from './config/search.config';
+import searchConfig from './config/search.config.js';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { ResultsList } from 'maftest-button';
+import "./styles.scss";
+import ResultsList from './components/ResultsList/ResultsList';
 
 const el = document.getElementById('root');
 const root = ReactDOM.createRoot(el);
@@ -15,25 +16,87 @@ const App = () => {
 
     return (
         <ReactiveBase
-            url="https://appbase-demo-ansible-abxiydt-arc.searchbase.io"
+            url="http://localhost:3000"
             app="good-books-ds"
-            credentials="04717bb076f7:be54685e-db84-4243-975b-5b32ee241d31"
-            enableAppbase
+            credentials="elastic:X1loFwNN3fFJLAOCjtRn"
+            enableAppbase={false}
         >
-        <div>
-            <header style={{backgroundColor: "rgb(43, 51, 60)", width: "100%", padding: "10px"}}>
-            <h1 style={{fontSize: "18px", color: "#CCC", fontWeight: "bold"}}>{name}</h1>
-            {/* <SearchBox config={searchboxConfig.searchbox} button="horizontal" handleSearch={handleSearch} width="600px" /> */}
-            </header>
-            <div style={{padding: '10px'}}>
-                {/* <ResultsList 
-                data={result} 
-                config={ api === "node" ? 
-                    searchNodeConfig.search.results.config : 
-                    searchConfig.search.results.config } 
-                /> */}
+            <div>
+                <header style={{backgroundColor: "rgb(43, 51, 60)", width: "100%", padding: "10px"}}>
+                    <h1 style={{display: "inline-block", position: "relative", top: "3px", margin: "0 20px 0 0", fontSize: "28px", color: "#CCC", fontWeight: "bold"}}>{name}</h1>
+                    <div class="searchbox">
+                        <DataSearch
+                            componentId="searchbox"
+                            dataField={[
+                            {
+                                "field": "authors",
+                                "weight": 3
+                            },
+                            {
+                                "field": "authors.autosuggest",
+                                "weight": 1
+                            },
+                            {
+                                "field": "original_title",
+                                "weight": 5
+                            },
+                            {
+                                "field": "original_title.autosuggest",
+                                "weight": 1
+                            },
+                            ]}
+                            placeholder="Search for books or authors"
+                            innerClass={{
+                                input: 'search-input'
+                            }}
+                        />
+                    </div>
+                </header>
+                <div style={{padding: '10px'}}>
+                    {/* <ReactiveList
+                        componentId="results"
+                        dataField="_score"
+                        size={10}
+                        pagination={true}
+                        react={{
+                        and: ["searchbox"] //, "authorsfilter", "ratingsfilter"]
+                        }}
+                        render={({ data }) => (
+                        <ReactiveList.ResultCardsWrapper>
+                        {data.map((item) => (
+                            <ResultCard key={item._id}>
+                            <ResultCard.Image src={item.image} />
+                            <ResultCard.Title
+                            dangerouslySetInnerHTML={{
+                            __html: item.original_title
+                            }}
+                            />
+                            <ResultCard.Description>
+                            {item.authors + " " + "*".repeat(item.average_rating)}
+                            </ResultCard.Description>
+                            </ResultCard>
+                        ))}
+                        </ReactiveList.ResultCardsWrapper>
+                        )}
+                    /> */}
+                    <ReactiveList
+                        componentId="results2"
+                        dataField="_score"
+                        size={6}
+                        pagination={true}
+                        showResultStats={true}
+                        react={{
+                            and: ["searchbox"] //, "authorsfilter", "ratingsfilter"]
+                        }}
+                        render={({ data }) => (
+                            <ResultsList 
+                                data={data} 
+                                config={ searchConfig.search.results.config } 
+                            />
+                        )}
+                    />
+                </div>
             </div>
-        </div>
         </ReactiveBase>
     )
 }
