@@ -8,7 +8,7 @@ Goals:
 
 # Setup
 
-1. Create an instance of Elasticsearch that will support the application. This can be done in various ways, e.g. a. via ReactiveSearch's hosted product (https://www.reactivesearch.io/) or b. via Elasticsearch's products (https://www.elastic.co/downloads/).
+1. Create an instance of Elasticsearch that will support the application. This can be done in various ways, e.g. a. via ReactiveSearch's hosted product (https://www.reactivesearch.io/) or b. via Elasticsearch's products directly (https://www.elastic.co/downloads/).
 
 2. Load the application data into your Elasticsearch instance.
 
